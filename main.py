@@ -1,2 +1,2 @@
-#for test
+#for testing purpose
 import pygame
