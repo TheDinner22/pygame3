@@ -34,7 +34,9 @@ def main():
     red_rec=pygame.Rect(700,300,SPACESHIP_WIDTH,SPACESHIP_HEIGHT)#args are "x,y,width,height"
     yellow_rec=pygame.Rect(100,300,SPACESHIP_WIDTH,SPACESHIP_HEIGHT)#^
     clock=pygame.time.Clock()#define clock object
-    #flag and game loopmmmmmmmmmmmmm
+    #flag and game loop
+    running=True
+    while running:
         #hard limit the fps
         clock.tick(FPS)#limit this while loop to 60 runs per second
         #loop through all of the events. So we can bind to them if needed
@@ -44,7 +46,7 @@ def main():
                 running=False
         #if something isn't event based it goes here
         keys_pressed=pygame.key.get_pressed()#returns all keys pressed down during this frame
-        if keys_pressed[pygame.K_a]:#left ##working here##
+        if keys_pressed[pygame.K_a]:#left 
         draw_window(red_rec,yellow_rec)
     #when game loop ends, close the window
     pygame.quit()
