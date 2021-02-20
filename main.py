@@ -12,6 +12,10 @@ pygame.display.set_caption("Joe's GUI")
 FPS=60
 #define a velocity that all rectangles move at
 VEL=5
+#bullet velocity
+BULLET_VEL=7
+#max number of bullets
+MAX_RENDERED_BULLETS=3
 #define border in the middle of the screen
 BORDER=pygame.Rect(445,0,10,HEIGHT)#445 becuase it draws from top right so we compensate so it looks like it drew from the middle
 #all used rgb colors
@@ -53,12 +57,28 @@ def red_handle_movement(keys_pressed,red_rec):
         red_rec.y-=VEL
     if keys_pressed[pygame.K_DOWN] and red_rec.y+red_rec.height+VEL<HEIGHT:#down
         red_rec.y+=VEL
+def handle_bullets(yellow_bullets,red_bullets,yellow,red):
+    """handle all bullets and their movement,collsion,etc"""
+    # yellow bullets
+    for bullet in yellow_bullets:
+        bullet.x+=BULLET_VEL
+        #check for collisions
+        if yellow.colliderect(bullet):
+            #remove the bullet
+            yellow_bullets.remove(bullet)
+            # we was gonna make an event here ##//##
+    # red bullets
 #main game loop function
 def main():
     """game loop, as well as collision detectors etc"""
     #hit boxes for spaceships
     red_rec=pygame.Rect(700,300,SPACESHIP_WIDTH,SPACESHIP_HEIGHT)#args are "x,y,width,height"
     yellow_rec=pygame.Rect(100,300,SPACESHIP_WIDTH,SPACESHIP_HEIGHT)#^
+    
+    #list of all bullets
+    red_bullets=[]
+    yellow_bullets=[]
+    
     clock=pygame.time.Clock()#define clock object
     #flag and game loop
     running=True
@@ -70,11 +90,23 @@ def main():
             #bind to quit event
             if event.type==pygame.QUIT:
                 running=False
+            #bind to keyDown event
+            if event.type==pygame.KEYDOWN:
+                # left ctrl
+                if event.key==pygame.K_LCTRL and len(yellow_bullets)<MAX_RENDERED_BULLETS:
+                    bullet=pygame.Rect(yellow_rec.x+yellow_rec.width,yellow_rec.y+int(yellow_rec.height/2)-2,10,5)
+                    yellow_bullets.append(bullet)
+                # right ctrl
+                if event.key==pygame.K_RCTRL and len(red_bullets)<MAX_RENDERED_BULLETS:
+                    bullet=pygame.Rect(red_rec.x,red_rec.y+int(red_rec.height/2)-2,10,5)
+                    red_bullets.append(bullet)
         #if something isn't event based it goes here
         keys_pressed=pygame.key.get_pressed()#returns all keys pressed down during this frame
         #move yellow and redif needed
         yellow_handle_movement(keys_pressed,yellow_rec)
         red_handle_movement(keys_pressed,red_rec)
+        #bullets move
+        handle_bullets(yellow_bullets,red_bullets,yellow_rec,red_rec)
         draw_window(red_rec,yellow_rec)
     #when game loop ends, close the window
     pygame.quit()
@@ -83,4 +115,4 @@ def main():
 if __name__=="__main__":
     main()
 
-#52:39 on https://www.youtube.com/watch?v=jO6qQDNa2UY
+#1:05:44 on https://www.youtube.com/watch?v=jO6qQDNa2UY
