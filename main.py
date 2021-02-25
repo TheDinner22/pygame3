@@ -41,6 +41,7 @@ SPACE=pygame.transform.scale(pygame.image.load(os.path.join("assets","space.png"
 
 BULLET_HIT_SOUND=pygame.mixer.Sound(os.path.join("assets","boom.ogg"))
 BULLET_FIRE_SOUND=pygame.mixer.Sound(os.path.join("assets","pew.ogg"))
+VICTORY_SCREAM=pygame.mixer.Sound(os.path.join("assets","winner.ogg"))
 
 #all events
 YELLOW_HIT=pygame.USEREVENT+1 #we plus one here to make this events int-id uniqe
@@ -111,7 +112,7 @@ def handle_bullets(yellow_bullets,red_bullets,yellow,red):
             red_bullets.remove(bullet)
 #call when someone winds
 def draw_winner(text):
-    """draw who won"""
+    """draw who won and yell"""
     text=WINNER_FONT.render(text,1,WHITE)
     WIN.blit(text,(WIDTH//2-text.get_width()//2,HEIGHT//2-text.get_height()//2))
     pygame.display.update()
@@ -172,6 +173,7 @@ def main():
         if yellow_health<=0: #decide winner
             winner_text="RED WINS"
         if winner_text!="":
+            VICTORY_SCREAM.play()
             draw_winner(winner_text)
             break
         keys_pressed=pygame.key.get_pressed()#returns all keys pressed down during this frame
