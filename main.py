@@ -39,8 +39,8 @@ RED_SPACESHIP=pygame.transform.rotate(pygame.transform.scale(RED_SPACESHIP_IMAGE
 
 SPACE=pygame.transform.scale(pygame.image.load(os.path.join("assets","space.png")),(WIDTH,HEIGHT))
 
-BULLET_HIT_SOUND=pygame.mixer.Sound(os.path.join("assets","Grenade+1.mp3"))
-BULLET_FIRE_SOUND=pygame.mixer.Sound(os.path.join("assets","Gun+Silencer.mp3"))
+BULLET_HIT_SOUND=pygame.mixer.Sound(os.path.join("assets","boom.mp3"))
+BULLET_FIRE_SOUND=pygame.mixer.Sound(os.path.join("assets","pew.mp3"))
 
 #all events
 YELLOW_HIT=pygame.USEREVENT+1 #we plus one here to make this events int-id uniqe
