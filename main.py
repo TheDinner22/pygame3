@@ -38,6 +38,10 @@ RED_SPACESHIP_IMAGE=pygame.image.load(os.path.join("assets","spaceship_red.png")
 RED_SPACESHIP=pygame.transform.rotate(pygame.transform.scale(RED_SPACESHIP_IMAGE,(SPACESHIP_WIDTH,SPACESHIP_HEIGHT)),270)
 
 SPACE=pygame.transform.scale(pygame.image.load(os.path.join("assets","space.png")),(WIDTH,HEIGHT))
+
+BULLET_HIT_SOUND=pygame.mixer.Sound(os.path.join("assets","Grenade+1.mp3"))
+BULLET_FIRE_SOUND=pygame.mixer.Sound(os.path.join("assets","Gun+Silencer.mp3"))
+
 #all events
 YELLOW_HIT=pygame.USEREVENT+1 #we plus one here to make this events int-id uniqe
 RED_HIT=pygame.USEREVENT+2 #we plus two here to make this events int-id uniqe
@@ -147,16 +151,20 @@ def main():
                 if event.key==pygame.K_LCTRL and len(yellow_bullets)<MAX_RENDERED_BULLETS:
                     bullet=pygame.Rect(yellow_rec.x+yellow_rec.width,yellow_rec.y+int(yellow_rec.height/2)-2,10,5)
                     yellow_bullets.append(bullet)
+                    BULLET_FIRE_SOUND.play()
                 # right ctrl
                 if event.key==pygame.K_RCTRL and len(red_bullets)<MAX_RENDERED_BULLETS:
                     bullet=pygame.Rect(red_rec.x,red_rec.y+int(red_rec.height/2)-2,10,5)
                     red_bullets.append(bullet)
+                    BULLET_FIRE_SOUND.play()
             #bind to red hit event
             if event.type==RED_HIT:
                 red_health-=1
+                BULLET_HIT_SOUND.play()
             #bind to yellow hit event
             if event.type==YELLOW_HIT:
                 yellow_health-=1
+                BULLET_HIT_SOUND.play()
         #if something isn't event based it goes here
         winner_text=""#this also works as a flag
         if red_health<=0: #decide winner
@@ -180,4 +188,4 @@ def main():
 if __name__=="__main__":
     main()
 
-#1:30:21 on https://www.youtube.com/watch?v=jO6qQDNa2UY
+#done on https://www.youtube.com/watch?v=jO6qQDNa2UY
