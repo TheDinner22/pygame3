@@ -21,6 +21,8 @@ BORDER=pygame.Rect(445,0,10,HEIGHT)#445 becuase it draws from top right so we co
 #all used rgb colors
 WHITE=(255,255,255)
 BLACK=(0,0,0)
+RED=(255,0,0)
+YELLOW=(255,255,0)
 #all static assets (resized and rotated)
 SPACESHIP_WIDTH,SPACESHIP_HEIGHT=55,40
 YELLOW_SPACESHIP_IMAGE=pygame.image.load(os.path.join("assets","spaceship_yellow.png"))
@@ -29,13 +31,21 @@ YELLOW_SPACESHIP=pygame.transform.rotate(pygame.transform.scale(YELLOW_SPACESHIP
 RED_SPACESHIP_IMAGE=pygame.image.load(os.path.join("assets","spaceship_red.png"))
 RED_SPACESHIP=pygame.transform.rotate(pygame.transform.scale(RED_SPACESHIP_IMAGE,(SPACESHIP_WIDTH,SPACESHIP_HEIGHT)),270)
 
+#all events
+YELLOW_HIT=pygame.USEREVENT+1 #we plus one here to make this events int-id uniqe
+RED_HIT=pygame.USEREVENT+2 #we plus two here to make this events int-id uniqe
+
 #draw function
-def draw_window(red,yellow):
+def draw_window(red,yellow,red_bullets,yellow_bullets):
     """change the background"""
     WIN.fill(WHITE)# set b.g. color r,g,b
     pygame.draw.rect(WIN,BLACK,BORDER)#params: (where draw to?,color,rectangle drawn)
     WIN.blit(YELLOW_SPACESHIP,(yellow.x,yellow.y))#blit used for writing text or images to screen
     WIN.blit(RED_SPACESHIP,(red.x,red.y))
+    for bullet in red_bullets:
+        pygame.draw.rect(WIN,RED,bullet)
+    for bullet in yellow_bullets:
+        pygame.draw.rect(WIN,YELLOW,bullet)
     pygame.display.update()
 def yellow_handle_movement(keys_pressed,yellow_rec):
     """all of the movement for the yellow ship"""
@@ -63,11 +73,20 @@ def handle_bullets(yellow_bullets,red_bullets,yellow,red):
     for bullet in yellow_bullets:
         bullet.x+=BULLET_VEL
         #check for collisions
-        if yellow.colliderect(bullet):
+        if red.colliderect(bullet):
+            #post event so we can interact with the list in the main function
+            pygame.event.post(pygame.event.Event(RED_HIT))
             #remove the bullet
             yellow_bullets.remove(bullet)
-            # we was gonna make an event here ##//##
     # red bullets
+    for bullet in red_bullets:
+        bullet.x-=BULLET_VEL
+        #check for collisions
+        if yellow.colliderect(bullet):
+            #post event so we can interact with the list in the main function
+            pygame.event.post(pygame.event.Event(YELLOW_HIT))
+            #remove the bullet
+            red_bullets.remove(bullet)
 #main game loop function
 def main():
     """game loop, as well as collision detectors etc"""
@@ -107,7 +126,7 @@ def main():
         red_handle_movement(keys_pressed,red_rec)
         #bullets move
         handle_bullets(yellow_bullets,red_bullets,yellow_rec,red_rec)
-        draw_window(red_rec,yellow_rec)
+        draw_window(red_rec,yellow_rec,red_bullets,yellow_bullets)
     #when game loop ends, close the window
     pygame.quit()
 
@@ -115,4 +134,4 @@ def main():
 if __name__=="__main__":
     main()
 
-#1:05:44 on https://www.youtube.com/watch?v=jO6qQDNa2UY
+#1:12:21 on https://www.youtube.com/watch?v=jO6qQDNa2UY
