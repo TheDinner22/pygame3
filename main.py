@@ -58,8 +58,9 @@ def draw_window(red,yellow,red_bullets,yellow_bullets,red_health,yellow_health):
     yellow_health_text = HEALTH_FONT.render("Health: "+str(yellow_health),1,WHITE)
     WIN.blit(red_health_text,(WIDTH-red_health_text.get_width()-10,10))
     WIN.blit(yellow_health_text,(10,10))
-
+    pygame.draw.rect(WIN,BLACK,yellow)###show hitboxes
     WIN.blit(YELLOW_SPACESHIP,(yellow.x,yellow.y))#blit used for writing text or images to screen
+    pygame.draw.rect(WIN,BLACK,red)### show hitboxes
     WIN.blit(RED_SPACESHIP,(red.x,red.y))
     for bullet in red_bullets:
         pygame.draw.rect(WIN,RED,bullet)
@@ -131,8 +132,8 @@ def main():
     yellow_bullets=[]
     
     #initilize health stuff
-    red_health=10
-    yellow_health=10
+    red_health=4
+    yellow_health=4
 
     clock=pygame.time.Clock()#define clock object
     #flag and game loop
